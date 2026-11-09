@@ -1,7 +1,190 @@
-{
-    "folders": [
-        {
-            "path": "../kit.com"
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("Kit Clone initialisé avec succès.");
+
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileMenuDrawer = document.getElementById('mobileMenuDrawer');
+    const hamburgerIcon = document.getElementById('hamburgerIcon');
+
+    if (mobileMenuToggle && mobileMenuDrawer) {
+        mobileMenuToggle.addEventListener('click', () => {
+            const isOpen = mobileMenuDrawer.classList.toggle('open');
+            if (isOpen) {
+                hamburgerIcon.classList.remove('fa-bars');
+                hamburgerIcon.classList.add('fa-xmark');
+            } else {
+                hamburgerIcon.classList.remove('fa-xmark');
+                hamburgerIcon.classList.add('fa-bars');
+            }
+        });
+
+        const mobileLinks = mobileMenuDrawer.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenuDrawer.classList.remove('open');
+                hamburgerIcon.classList.remove('fa-xmark');
+                hamburgerIcon.classList.add('fa-bars');
+            });
+        });
+    }
+
+    const heroSubmitButton = document.getElementById('heroSubmitButton');
+    const heroEmailField = document.getElementById('heroEmailField');
+
+    const footerSubmitButton = document.getElementById('footerSubmitButton');
+
+    const footerEmailField = document.getElementById('footerEmailField');
+
+    function handleEmailSubscription(emailInput) {
+        if (!emailInput) return;
+        const emailValue = emailInput.value.trim();
+
+        if (emailValue !== '' && emailValue.includes('@') && emailValue.includes('.')) {
+            alert(`Félicitations ! Votre espace créateur est en cours de création pour : ${emailValue}`);
+            emailInput.value = '';
+        } else {
+            alert('Veuillez entrer une adresse e-mail valide pour commencer.');
+            emailInput.focus();
         }
-    ]
-}
+    }
+
+    if (heroSubmitButton && heroEmailField) {
+        heroSubmitButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleEmailSubscription(heroEmailField);
+        });
+
+        heroEmailField.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleEmailSubscription(heroEmailField);
+            }
+        });
+    }
+
+    if (footerSubmitButton && footerEmailField) {
+        footerSubmitButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleEmailSubscription(footerEmailField);
+        });
+
+        footerEmailField.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleEmailSubscription(footerEmailField);
+            }
+        });
+    }
+
+    const showcaseTabs = document.querySelectorAll('.showcase-tab-btn');
+    const showcasePanels = document.querySelectorAll('.showcase-panel');
+
+    if (showcaseTabs.length > 0 && showcasePanels.length > 0) {
+        showcaseTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                showcaseTabs.forEach(t => t.classList.remove('active'));
+                showcasePanels.forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                const targetId = tab.getAttribute('data-target');
+                const targetPanel = document.getElementById(targetId);
+                if (targetPanel) {
+                    targetPanel.classList.add('active');
+                }
+            });
+        });
+    }
+
+    const faqItems = document.querySelectorAll('.faq-accordion-item');
+
+    if (faqItems.length > 0) {
+        faqItems.forEach(item => {
+            const questionBtn = item.querySelector('.faq-question-btn');
+            if (questionBtn) {
+                questionBtn.addEventListener('click', () => {
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    item.classList.toggle('active');
+                });
+            }
+        });
+    }
+
+    const openLoginModalBtn = document.getElementById('openLoginModal');
+    const openSignupModalBtn = document.getElementById('openSignupModal');
+    const authModal = document.getElementById('authModal');
+    const closeAuthModal = document.getElementById('closeAuthModal');
+    const authForm = document.getElementById('authForm');
+    const modalTitle = document.getElementById('modalTitle');
+
+    function openModal(titleText) {
+        if (authModal) {
+            modalTitle.textContent = titleText;
+            authModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeModalWindow() {
+        if (authModal) {
+            authModal.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    if (openLoginModalBtn) {
+        openLoginModalBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal('Connexion à votre espace Kit');
+        });
+    }
+    if (openSignupModalBtn) {
+        openSignupModalBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal('Créer votre compte Kit gratuit');
+        });
+    }
+    if (closeAuthModal) {
+        closeAuthModal.addEventListener('click', closeModalWindow);
+    }
+
+    if (authModal) {
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                closeModalWindow();
+            }
+        });
+    }
+
+    if (authForm) {
+        authForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const modalEmail = document.getElementById('modalEmail').value;
+            alert(`Authentification réussie pour : ${modalEmail}`);
+            closeModalWindow();
+            authForm.reset();
+        });
+    }
+
+    const dashboardBars = document.querySelectorAll('.bar-item');
+    if (dashboardBars.length > 0) {
+        setInterval(() => {
+            dashboardBars.forEach(bar => {
+                const randomHeightVal = Math.floor(Math.random() * 50) + 40;
+                bar.style.height = `${randomHeightVal}%`;
+            });
+        }, 5000);
+    }
+
+    const siteHeader = document.getElementById('siteHeader');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 40) {
+            siteHeader.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.06)';
+        } else {
+            siteHeader.style.boxShadow = 'none';
+        }
+    });
+
+    console.log("Tous les gestionnaires d'événements JavaScript ont été attachés avec succès.");
+});
